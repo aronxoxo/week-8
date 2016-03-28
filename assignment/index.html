@@ -4,15 +4,13 @@
     <!-- CSS Imports -->
     <link rel="stylesheet" href="css/reset.css" />
     <link rel="stylesheet" href="css/leaflet.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/0.2.3/leaflet.draw.css" />
     <link rel="stylesheet" href="css/style.css" />
   </head>
   <body>
     <!-- Sidebar -->
     <div class="sidebar">
-      <input type = "button" id = "ex1" value = "Excercise 1"></input><br>
-      <input type = "button" id = "ex2" value = "Excercise 2"></input><br>
-      <input type = "button" id = "ex3" value = "Excercise 3"></input><br>
-      <input type = "button" id = "stretch" value = "Stretch Goal"></input><br>
+      <div id="shapes"></div>
     </div>
     <!-- Map -->
     <div id="map" class="map"></div>
@@ -21,7 +19,8 @@
     <script src="js/underscore.js"></script>
     <script src="js/leaflet.js"></script>
     <script src="https://api.tiles.mapbox.com/mapbox.js/plugins/turf/v2.0.0/turf.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/0.2.3/leaflet.draw.js"></script>
     <script src="js/setup.js"></script>
-    <script src="js/turf-lab.js"></script>
+    <script src="js/application.js"></script>
   </body>
 </html>

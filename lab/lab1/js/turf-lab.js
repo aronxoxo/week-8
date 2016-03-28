@@ -70,23 +70,71 @@ Produce a Feature and a FeatureCollection (look to the in-documentation examples
 unclear) such that the single Point Feature is in Philadelphia and the nearest point in the
 FeatureCollection (there should be at least two other points in this collection) happens
 to be in New York City. Plot the NYC point and no others with the use of turf.nearest.
-
-
+===================== */
+$('#ex1').click(function(){
+  map.setView([40.704586878965245, -74.0097427368164],14);
+});
+var nearestInNYC = turf.nearest(dataPhilly, dataNYC);
+var lab1Ex1Marker = L.marker([nearestInNYC.geometry.coordinates[1], nearestInNYC.geometry.coordinates[0]], {icon: L.divIcon({className: 'nearest-icon'})}).addTo(map).bindPopup("This is the lab1, excercise 1 marker<br>"+[nearestInNYC.geometry.coordinates[1], nearestInNYC.geometry.coordinates[0]]).openPopup();
+/* =====================
 Exercise 2: Finding the average point value (a form of spatial join)
 Docs here: http://turfjs.org/static/docs/module-turf_average.html
 Produce one FeatureCollection of points (at least 5) and one of polygons (at least 2)
 such that, by applying turf.average, you generate a new set of polygons in which one of
 the polygons has the property "averageValue" with a value of 100.
+===================== */
+$('#ex2').click(function(){
+  map.setView([39.9522, -75.1639],14);
+});
 
+var setStyle = function(colorToFill){
+  return {
+    weight: 2,
+    opacity: 1,
+    color: "white",
+    dashArray: '3',
+    fillOpacity: 0.7,
+    fillColor: colorToFill
+  };
+};
 
+var averagedInPolygons = turf.average(dataLab1Ex2Polygons, dataLab1Ex2Points, 'num', 'num_avg');
+var polygonOne = averagedInPolygons.features[0];
+var polygonTwo = averagedInPolygons.features[1];
+
+var resultPolygonOne = L.geoJson(polygonOne, {style: setStyle('#ffb733')}).addTo(map).bindPopup("The average value of this Polygon is: "+ polygonOne.properties.num_avg.toString()).openPopup();
+var resultPolygonTwo = L.geoJson(polygonTwo, {style: setStyle('#00ffa5')}).addTo(map).bindPopup("The average value of this Polygon is: "+ polygonTwo.properties.num_avg.toString()).openPopup();
+/* =====================
 Exercise 3: Tagging points according to their locations
 http://turfjs.org/static/docs/module-turf_tag.html
 It can be quite useful to 'tag' points in terms of their being within this or that
 polygon. You might, for instance, want to color markers which represent dumpsters
 according to the day that trash is picked up in that area. Create three polygons
 and use properties on those polygons to color 5 points.
+===================== */
+$('#ex3').click(function(){
+  map.setView([39.9522, -75.1639],14);
+});
 
+var taggedInPolygons = turf.tag(lab1Ex3Points, lab1Ex3Polygons, "location", "markerLocation");
 
+var pointsCenterCity = _.chain(taggedInPolygons.features).filter(function(datum){
+  return datum.properties.markerLocation === "Center City";
+}).map(function(datum) {
+  return L.marker([datum.geometry.coordinates[1], datum.geometry.coordinates[0]], {icon: L.divIcon({className: 'icon-center-city'})}).addTo(map);
+}).value();
+var pointsWestPhilly = _.chain(taggedInPolygons.features).filter(function(datum){
+  return datum.properties.markerLocation === "West Philadelphia";
+}).map(function(datum) {
+  return L.marker([datum.geometry.coordinates[1], datum.geometry.coordinates[0]], {icon: L.divIcon({className: 'icon-west-philly'})}).addTo(map);
+}).value();
+var pointsNorthPhilly = _.chain(taggedInPolygons.features).filter(function(datum){
+  return datum.properties.markerLocation === "North Philadelphia";
+}).map(function(datum) {
+  return L.marker([datum.geometry.coordinates[1], datum.geometry.coordinates[0]], {icon: L.divIcon({className: 'icon-north-philly'})}).addTo(map);
+}).value();
+
+/* =====================
 *STRETCH GOAL*
 Exercise 4: Calculating a destination
 A species of bird we're studying is said to travel in a straight line for 500km
@@ -96,3 +144,9 @@ flying from [-87.4072265625, 38.376115424036016] and that its last known coordin
 was [-87.5830078125, 38.23818011979866]. Given this information, see if you can
 determine where we can expect this flock of birds to rest.
 ===================== */
+$('#stretch').click(function(){
+  map.setView([35.135086893534336, -91.29668251511623],14);
+});
+var bearing = turf.bearing(pointStart, pointLastKnown);
+var pointDestination = turf.destination(pointStart, 500, bearing, 'kilometers');
+var markerDestination = L.marker([pointDestination.geometry.coordinates[1], pointDestination.geometry.coordinates[0]], {icon: L.divIcon({className: 'icon-destination'})}).addTo(map).bindPopup("This is the destination of the flock.<br>"+[pointDestination.geometry.coordinates[1], pointDestination.geometry.coordinates[0]]).openPopup();

@@ -42,3 +42,11 @@ h2 {
     50% {opacity: 1; stroke-width: 10;}
     100% {opacity: 1;}
 }
+
+.shape{
+  background-color: #d8d8d8;
+  height:100px;
+  width:300px;
+  padding-top: 8px;
+  padding-left: 30px;
+}
